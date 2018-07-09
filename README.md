@@ -32,3 +32,9 @@ OPTIONS:
 	-n | --name	Choose a name for you sqlmap container (e.g. injector -n target)
 	-a | --stats	Display the container's statistics
 	-h | --help	Print this help
+
+### Videos ###
+
+![alt-text](https://github.com/alexoslabs2/injector/blob/master/examples/example1.gif)
+
+![alt-text](https://github.com/alexoslabs2/injector/blob/master/examples/example2.gif)
