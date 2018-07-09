@@ -27,7 +27,7 @@ sudo apt-get -y install curl git ruby-full apt-transport-https ca-certificates c
 # Docker install
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - 
 
-#echo "deb [arch=amd64] https://download.docker.com/linux/debian stretch stable" >> /etc/apt/sources.list
+echo "deb [arch=amd64] https://download.docker.com/linux/debian stretch stable" >> /etc/apt/sources.list
 
 sudo apt-get update
 
