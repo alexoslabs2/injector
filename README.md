@@ -5,7 +5,9 @@ Injector a.k.a tr4c1l0rds is a tool to run simultaneous sql injections attacks a
 ### How do I get set up? ###
 
 git clone https://github.com/alexoslabs2/injector.git
+
 cd injector
+
 ./setup.sh
 
 ### Help ###
