@@ -1,6 +1,6 @@
 ### README ####
 
-Injector a.k.a tr4c1l0rds is a tool to run simultaneous sql injections attacks anonymously.
+Injector a.k.a tr4c1l0rds is a tool to run simultaneous sql injections attacks anonymously using containers. 
 
 ### How do I get set up? ###
 
@@ -30,27 +30,3 @@ OPTIONS:
 	-n | --name	Choose a name for you sqlmap container (e.g. injector -n target)
 	-a | --stats	Display the container's statistics
 	-h | --help	Print this help
-
-
-### Videos ###
-
-
-##### Let's Hack #####
-
-https://asciinema.org/a/m1S46KsIrvGbZqwDoZ14Qkvc6
-
-##### List tables #####
-
-https://asciinema.org/a/581sQV97F0tfTMlrXisjtQmY3
-
-##### Dump #####
-
-https://asciinema.org/a/3XAkDcYrIlAupNvQo6v3bWkad
-
-##### Post Request #####
-
-https://asciinema.org/a/LjDXu4Njzn5TlMP8LmyysZ3P1
-
-##### Targets file, Statistics and Stop Containers #####
-
-https://asciinema.org/a/AzbDB86JGAsDH7a2C4XJHLydY
