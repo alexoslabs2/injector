@@ -1,4 +1,4 @@
-### README ####
+### Injector a.k.a Tr4c1l0rds ####
 
 Injector a.k.a tr4c1l0rds is a tool to run simultaneous sql injections attacks anonymously using containers. 
 
