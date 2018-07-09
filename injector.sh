@@ -1,6 +1,6 @@
 #!/bin/bash
 #Injector a.k.a tr4c1l0rds
-#Authors: Alexos Alacerda
+#Authors: @alexos @alacerda
 
 
 #-----------------------------
