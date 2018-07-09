@@ -29,7 +29,7 @@ OPTIONS:
 	-s | --stop	Stop the specified container (e.g. injector -s <container_name>) or use -s all to stop all containers
 	-o | --logs	Show the container log
 	-p | --dump	Dump the data
-	-n | --name	Choose a name for you sqlmap container (e.g. injector -n target)
+	-n | --name	Choose a name for you sqlmap container (e.g. injector -u TARGET -n INSTANCENAME)
 	-a | --stats	Display the container's statistics
 	-h | --help	Print this help
 
