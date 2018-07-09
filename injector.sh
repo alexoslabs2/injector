@@ -2,19 +2,6 @@
 #Injector a.k.a tr4c1l0rds
 #Authors: Alexos Alacerda
 
-#  ____________________________________________________________________________
-#  /______|________________________________________/__|________________________
-#  $$$$$$/_________________________________________$$_|________________________
-#  __$$_|__/_______\_____/__|_/______\__/_______|/_$$___|___/______\__/______\_
-#  __$$_|__$$$$$$$__|____$$/_/$$$$$$__|/$$$$$$$/_$$$$$$/___/$$$$$$__|/$$$$$$__|
-#  __$$_|__$$_|__$$_|____/__|$$____$$_|$$_|________$$_|____$$_|__$$_|$$_|__$$/_
-#  __$$_|__$$_|__$$_|____$$_|$$$$$$$$/_$$_\________$$_|/__|$$_\__$$_|$$_|______
-#  /_$$___|$$_|__$$_|____$$_|$$_______|$$_______|__$$__$$/_$$____$$/_$$_|______
-#  $$$$$$/_$$/___$$/_____$$_|_$$$$$$$/__$$$$$$$/____$$$$/___$$$$$$/__$$/_______
-#  ________________/__\__$$_|__________________________________________________
-#  ________________$$____$$/___________________________________________________
-#  _________________$$$$$$/____________________________________________________
-
 
 #-----------------------------
 #       Terminal colors
@@ -53,7 +40,7 @@ usage() {
 	echo "Usage: $0 [OPTIONS]"
 	echo "OPTIONS:"
 	echo -e "\t-l | $GREEN--list$END$GREEN\tList all existent containers$END"
-	echo -e "\t-u | $GREEN--url$END$GREEN\t Set target url to be tested (e.g. injector -u www.example.com)$END"
+	echo -e "\t-u | $GREEN--url$END$GREEN\t Set target url to be tested (e.g. injector -u TARGET)$END"
 	echo -e "\t-f | $GREEN--file$END$GREEN\t Set a file containing a list of targets (e.g. injector -f targets.txt)$END"
 	echo -e "\t-d | $GREEN--database$END$GREEN\t Set the target database (e.g. injector -d <database> $END"
 	echo -e "\t-t | $GREEN--table$END$GREEN\t Set the target table (e.g. injector -d <database> -t <table>)$END"
@@ -61,7 +48,7 @@ usage() {
 	echo -e "\t-s | $GREEN--stop$END$GREEN\tStop the specified container (e.g. injector -s <container_name>) or use -s all to stop all containers$END"
 	echo -e "\t-o | $GREEN--logs$END$GREEN\tShow the container log$END"
 	echo -e "\t-p | $GREEN--dump$END$GREEN\tDump the data$END"
-	echo -e "\t-n | $GREEN--name$END$GREEN\tChoose a name for you sqlmap container (e.g. injector -n target)$END"
+	echo -e "\t-n | $GREEN--name$END$GREEN\tChoose a name for you sqlmap container (e.g. injector -u TARGET -n INSTANCENAME)$END"
 	echo -e "\t-a | $GREEN--stats$END$GREEN\tDisplay the container's statistics$END"
 	echo -e "\t-h | $GREEN--help$END$GREEN\tPrint this help$END"
 
