@@ -15,6 +15,7 @@ cd injector
 ./injector.sh -h
 
 Usage: ./injector.sh -u [TARGET] [OPTIONS]
+
 Usage: ./injector.sh [OPTIONS]
 
 OPTIONS:
