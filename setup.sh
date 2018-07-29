@@ -22,10 +22,11 @@ export DEBIAN_FRONTEND="noninteractive"
 
 sudo apt-get update
 
-sudo apt-get -y install curl git ruby-full apt-transport-https ca-certificates curl gnupg2 software-properties-common
+sudo apt-get -y install curl git ruby-full apt-transport-https ca-certificates curl gnupg2 software-properties-common dirmngr
 
 # Docker install
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - 
+
+sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
 
 echo "deb [arch=amd64] https://download.docker.com/linux/debian stretch stable" >> /etc/apt/sources.list
 
@@ -42,6 +43,7 @@ sudo systemctl start docker
 #-----------------------------
 #       Creating images
 #-----------------------------
+
 echo -e "$GREEN[+] Starting privoxy image..\n$END"
 cd privoxy
 sudo docker build -t alexoscorelabs/privoxy .
