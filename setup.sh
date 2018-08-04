@@ -46,16 +46,16 @@ sudo systemctl start docker
 
 echo -e "$GREEN[+] Starting privoxy image..\n$END"
 cd privoxy
-sudo docker build -t alexoscorelabs/privoxy .
-sudo docker run -d --name proxy alexoscorelabs/privoxy
+docker build -t alexoscorelabs/privoxy .
+docker run -d --name proxy alexoscorelabs/privoxy
 echo -e "$GREEN[+] Done...$END"
 
 echo -e "\n$GREEN[+] Testing network...$END$END"
 curl -x 172.17.0.2:8118 http://ifconfig.es
 
-sudo docker rm -f proxy
+docker rm -f proxy
 
 echo -e "\n$GREEN[+] Starting sqlmap image...\n$END"
 cd ../sqlmap
-sudo docker build -t alexoscorelabs/sqlmap .
+docker build -t alexoscorelabs/sqlmap .
 echo -e "$GREEN[+] Done...$END"
