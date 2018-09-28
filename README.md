@@ -15,7 +15,7 @@ Injector a.k.a tr4c1l0rds is a tool to run simultaneous sql injections attacks a
 
 ##### Mac
 
-Download Docker forom [Docker Install](https://store.docker.com/editions/community/docker-ce-desktop-mac)
+Download Docker from [Docker Install](https://store.docker.com/editions/community/docker-ce-desktop-mac) if you don't have it yet!
 
 `git clone https://github.com/alexoslabs2/injector.git`
 
