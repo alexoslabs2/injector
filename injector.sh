@@ -71,6 +71,7 @@ log_containers() {
     else
         docker logs --details -f $LOGCONT
     fi
+    exit
 }
 
 stats_containers() {
@@ -82,7 +83,8 @@ priv_kill () {
 }
 
 attack() {
-    if [ -z "$CONTNAME" ]; then
+    check_service
+    if [  -z $CONTNAME ]; then
         if [ ! -f $INST ]; then
             echo -n 1 > $INST
     	else
@@ -285,5 +287,5 @@ handle_args() {
 # clear
 build_environment
 handle_args "$@"
-check_service
+# check_service
 attack
