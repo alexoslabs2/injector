@@ -82,7 +82,7 @@ module DockerModule
     end
 
     def run_docker_containers
-        if @url_file
+        if !@url_file.empty?
             if File.exist?(@url_file)
                 f = File.open(@url_file)
 

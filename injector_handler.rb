@@ -155,7 +155,7 @@ class Injector
   		@sqlmap_hash_args["-T"] = @table_name if  @table_name
   		@sqlmap_hash_args["-C"] = @column_name if  @column_name
 
-        if !@url and !@target
+        if !@url and !@url_file
             STDERR.puts "[-] no target especified, please use -u <url> or -f <file targets>\n"
             exit 1
         end
