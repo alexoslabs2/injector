@@ -123,7 +123,7 @@ attack() {
     fi
 
     # Sqlmap container
-    docker run -d -it -v $VOLUME --name $CONTNAME alexoscorelabs/sqlmap -u $TARGET --proxy http://$privoxy_ip:8118 $USERAGENT $params --batch $LEVEL $RISK --threads $THREAD >> /dev/null
+    docker run -d -it -v $VOLUME --name $CONTNAME alexoscorelabs/sqlmap -u $TARGET --proxy ""http://$privoxy_ip:8118" $USERAGENT $params --batch $LEVEL $RISK --threads $THREAD >> /dev/null
     # sudo chown -R $USER:$USER /tmp/sqlmap
 
     # At this point docker watches the container. When it terminates, docker triggers priv_kill function in order to
@@ -144,12 +144,10 @@ read_file () {
 
 check_service () {
     echo -e "$GREEN[~] Checking if docker service is up...$END"
-    # sudo service docker status > /dev/null  # debian-wise only
     sudo systemctl status docker.service > /dev/null
 
     if [ $? == "3" ]; then
         echo -e "$BOLD_YELLOW[+] Starting docker...$END"
-        # sudo service docker start  # debian-wise only
         sudo systemctl start docker.service
     else
         echo -e "$GREEN[+]Service is running...Hack the Planet...$END"
