@@ -123,7 +123,7 @@ attack() {
     fi
 
     # Sqlmap container
-    docker run -d -it -v $VOLUME --name $CONTNAME alexoscorelabs/sqlmap -u $TARGET --proxy ""http://$privoxy_ip:8118" $USERAGENT $params --batch $LEVEL $RISK --threads $THREAD >> /dev/null
+    docker run -d -it -v $VOLUME --name $CONTNAME alexoscorelabs/sqlmap -u $TARGET --proxy "http://$privoxy_ip:8118" $USERAGENT $params --batch $LEVEL $RISK --threads $THREAD >> /dev/null
     # sudo chown -R $USER:$USER /tmp/sqlmap
 
     # At this point docker watches the container. When it terminates, docker triggers priv_kill function in order to
