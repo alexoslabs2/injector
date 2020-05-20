@@ -1,6 +1,6 @@
 #!/bin/bash
 #Injector a.k.a tr4c1l0rds
-#Authors: Alexos Alacerda
+#Authors: alexos userx nekone
 
 #  ____________________________________________________________________________
 #  /______|________________________________________/__|________________________
@@ -64,6 +64,11 @@ list_containers() {
 	exit 0
 }
 
+list_exited() {
+	docker ps -a -f status=exited
+	exit 0
+}
+
 log_containers() {
 	if [ $LOGCONT = " " ]; then
 		echo -e "$BOLD_YELLOW[-] Provide the injector container's name [!!]$END"
@@ -123,7 +128,7 @@ attack() {
     fi
 
     # Sqlmap container
-    docker run -d -it -v $VOLUME --name $CONTNAME alexoscorelabs/sqlmap -u $TARGET --proxy "http://$privoxy_ip:8118" $USERAGENT $params --batch $LEVEL $RISK --threads $THREAD >> /dev/null
+    docker run -d -it -v $VOLUME --name $CONTNAME alexoscorelabs/sqlmap -u $TARGET --proxy "http://$privoxy_ip:8118" $USERAGENT $params --batch --level "5" --risk "3" >> /dev/null
     # sudo chown -R $USER:$USER /tmp/sqlmap
 
     # At this point docker watches the container. When it terminates, docker triggers priv_kill function in order to
@@ -159,6 +164,7 @@ usage() {
             "Usage: $0 [OPTIONS]\n" \
             "OPTIONS:\n" \
             "\t-l | $GREEN--list$END$GREEN\tList all existent containers$END\n" \
+            "\t-e | $GREEN--exited$END$GREEN\tList exited containers$END\n" \
             "\t-u | $GREEN--url$END$GREEN\tSet target url to be tested (e.g. injector -u www.example.com)$END\n" \
             "\t-f | $GREEN--file$END$GREEN\tSet a file containing a list of targets (e.g. injector -f targets.txt)$END\n" \
             "\t-d | $GREEN--database$END$GREEN\tSet the target database (e.g. injector -d <database> $END\n" \
@@ -178,7 +184,7 @@ usage() {
 # Here is where the program actually starts
 handle_args() {
 
-    ARGS=`getopt -o lu:s:o:f:d:t:n:r:pha --long list,url:,stop:,logs:,name:,file:,database:,table:,post:,dump,stats,help -n 'injector' -- "$@"`
+    ARGS=`getopt -o leu::s:o:f:d:t:n:r:pha --long list,exited,url:,stop:,logs:,name:,file:,database:,table:,post:,dump,stats,help -n 'injector' -- "$@"`
 
     if [ $? != 0 ]; then
         exit 1
@@ -227,7 +233,7 @@ handle_args() {
                 shift
                 shift
                 if [ -z $1 ]; then
-                    break
+                    break/
                 fi
                 ;;
 
@@ -249,6 +255,11 @@ handle_args() {
             -l | --list )
                 list_containers
                 shift
+                break
+                ;;
+
+       	    -e | --exited )
+                list_exited
                 break
                 ;;
 
