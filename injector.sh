@@ -1,67 +1,58 @@
 #!/bin/bash
 #Injector a.k.a tr4c1l0rds
-#Authors: @alexos @alacerda
+#Authors: alexos userx nekone
+
+#  ____________________________________________________________________________
+#  /______|________________________________________/__|________________________
+#  $$$$$$/_________________________________________$$_|________________________
+#  __$$_|__/_______\_____/__|_/______\__/_______|/_$$___|___/______\__/______\_
+#  __$$_|__$$$$$$$__|____$$/_/$$$$$$__|/$$$$$$$/_$$$$$$/___/$$$$$$__|/$$$$$$__|
+#  __$$_|__$$_|__$$_|____/__|$$____$$_|$$_|________$$_|____$$_|__$$_|$$_|__$$/_
+#  __$$_|__$$_|__$$_|____$$_|$$$$$$$$/_$$_\________$$_|/__|$$_\__$$_|$$_|______
+#  /_$$___|$$_|__$$_|____$$_|$$_______|$$_______|__$$__$$/_$$____$$/_$$_|______
+#  $$$$$$/_$$/___$$/_____$$_|_$$$$$$$/__$$$$$$$/____$$$$/___$$$$$$/__$$/_______
+#  ________________/__\__$$_|__________________________________________________
+#  ________________$$____$$/___________________________________________________
+#  _________________$$$$$$/____________________________________________________
 
 
-#-----------------------------
-#       Terminal colors
-#-----------------------------
-BLUE="\e[00;34m"
-GREEN="\e[00;32m"
-CYAN="\e[0;31m"
-END="\e[00m"
+build_environment() {
+    #-----------------------------
+    #       Terminal colors      #
+    #-----------------------------
 
-#-----------------------------
-#       Variables
-#-----------------------------
-VOLUME="$HOME/.sqlmap/:/root/.sqlmap"
-INST="$HOME/.instances"
-THREADS=$(lscpu | grep ^CPU\(s\) | sed s/\ //g | cut -d":" -f 2)
-CID=""
-DATA=$2
-USERAGENT="--random-agent"
-LEVEL="5"
-RISK="3"
-FILE=""
-DATABASE=""
-TABLE=""
-CONTNAME=""
-POST=""
+    BLUE="\e[00;34m"
+    GREEN="\e[00;32m"
+    BOLD_YELLOW="\e[01;33m"
+    CYAN="\e[0;31m"
+    END="\e[00m"
 
-
-ARGS=`getopt -o lu:s:o:f:d:t:n:r:pha --long list,url:,stop:,logs:,name:,file:,database:,table:,post:,dump,stats,help -n 'injector' -- "$@"`
-
-if [ $? != 0 ]; then
-	exit 1
-fi
-
-usage() {
-	echo "Usage: $0 -u [TARGET] [OPTIONS]"
-	echo "Usage: $0 [OPTIONS]"
-	echo "OPTIONS:"
-	echo -e "\t-l | $GREEN--list$END$GREEN\tList all existent containers$END"
-	echo -e "\t-u | $GREEN--url$END$GREEN\t Set target url to be tested (e.g. injector -u TARGET)$END"
-	echo -e "\t-f | $GREEN--file$END$GREEN\t Set a file containing a list of targets (e.g. injector -f targets.txt)$END"
-	echo -e "\t-d | $GREEN--database$END$GREEN\t Set the target database (e.g. injector -d <database> $END"
-	echo -e "\t-t | $GREEN--table$END$GREEN\t Set the target table (e.g. injector -d <database> -t <table>)$END"
-	echo -e "\t-r | $GREEN--post$END$GREEN\tSet the POST request parameters (e.g -r param1&param2 or -r POST file request)$END"
-	echo -e "\t-s | $GREEN--stop$END$GREEN\tStop the specified container (e.g. injector -s <container_name>) or use -s all to stop all containers$END"
-	echo -e "\t-o | $GREEN--logs$END$GREEN\tShow the container log$END"
-	echo -e "\t-p | $GREEN--dump$END$GREEN\tDump the data$END"
-	echo -e "\t-n | $GREEN--name$END$GREEN\tChoose a name for you sqlmap container (e.g. injector -u TARGET -n INSTANCENAME)$END"
-	echo -e "\t-a | $GREEN--stats$END$GREEN\tDisplay the container's statistics$END"
-	echo -e "\t-h | $GREEN--help$END$GREEN\tPrint this help$END"
-
-	exit 0
+    #-----------------------------
+    #           Variables        #
+    #-----------------------------
+    VOLUME="$HOME/.sqlmap/:/root/.sqlmap"
+    INST="$HOME/.instances"
+    THREAD=$(lscpu | grep CPU\(s\) | sed "s/ //g" |grep -v "-" |awk -F ":" '{print $2}')
+    CID=""
+    DATA=$2
+    USERAGENT="--random-agent"
+    LEVEL="5"
+    RISK="3"
+    FILE=""
+    DATABASE=""
+    TABLE=""
+    CONTNAME=""
+    POST=""
 }
+
 
 stop_containers() {
 	if [ $STOPCONT == "all" ]; then
 		for cont in $(docker ps -aq); do
-		docker stop $cont | xargs docker rm 2>/dev/null
-	        rm  $INST 2>/dev/null 	
+            docker stop $cont | xargs docker rm 2>/dev/null
+	        rm  $INST 2>/dev/null
 		done
-	else	
+	else
 		docker stop $STOPCONT | xargs docker rm 2>/dev/null
 		echo -e "$GREEN $STOPCONT removed"
 	fi
@@ -73,17 +64,23 @@ list_containers() {
 	exit 0
 }
 
-log_containers() {
-	if [ $LOGCONT = " " ]; then
-		echo "Informe o nome do injector's container"
-	else
-		docker logs --details -f $LOGCONT
-	fi
+list_exited() {
+	docker ps -a -f status=exited
 	exit 0
 }
 
+log_containers() {
+	if [ $LOGCONT = " " ]; then
+		echo -e "$BOLD_YELLOW[-] Provide the injector container's name [!!]$END"
+        exit 0
+    else
+        docker logs --details -f $LOGCONT
+    fi
+    exit
+}
+
 stats_containers() {
-       docker stats --format "table {{.Name}} \t{{.CPUPerc}}\t{{.MemUsage}}\t{{.NetIO}}\t {{.BlockIO }} "
+    docker stats --format "table {{.Name}} \t{{.CPUPerc}}\t{{.MemUsage}}\t{{.NetIO}}\t {{.BlockIO }} "
 }
 
 priv_kill () {
@@ -91,8 +88,8 @@ priv_kill () {
 }
 
 attack() {
-    
-    if [ "x"$CONTNAME == "x" ]; then
+    check_service
+    if [  -z $CONTNAME ]; then
         if [ ! -f $INST ]; then
             echo -n 1 > $INST
     	else
@@ -102,19 +99,19 @@ attack() {
 	    CONTNAME="injector$CID"
     fi
 
-    echo "==> Pwning $TARGET"
+    echo -e "$GREEN==> Pwning $BOLD_YELLOW$TARGET$END"
     # Privoxy container
     docker run -d --rm --name proxy$CID alexoscorelabs/privoxy >> /dev/null
-    sleep 2
+    sleep 10
     privoxy_ip=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' proxy$CID)
-    
-    if [ "x"$DATABASE == "x" ]; then
+
+    if [ -z $DATABASE ]; then
         params="--dbs"
     else
-        if [ "x"$TABLE == "x" ]; then
+        if [ -z $TABLE ]; then
             params="--tables -D $DATABASE"
         else
-            if [ "x"$DUMP == "x" ]; then
+            if [ -z $DUMP ]; then
        	        params="-T $TABLE -D $DATABASE --columns"
             else
                 params="-T $TABLE -D $DATABASE --dump"
@@ -122,7 +119,7 @@ attack() {
     	fi
     fi
 
-    if [ "x"$POST != "x" ]; then
+    if [ ! -z $POST ]; then
 	    if [ -e $POST ]; then
         	params="--method POST -r $POST"
 	    else
@@ -131,9 +128,9 @@ attack() {
     fi
 
     # Sqlmap container
-    docker run -d -it -v $VOLUME --name $CONTNAME alexoscorelabs/sqlmap -u $TARGET --proxy http://$privoxy_ip:8118 $USERAGENT $params --batch $LEVEL $RISK --threads $THREADS>> /dev/null
-#    sudo chown -R $USER:$USER /tmp/sqlmap
-    
+    docker run -d -it -v $VOLUME --name $CONTNAME alexoscorelabs/sqlmap -u $TARGET --proxy "http://$privoxy_ip:8118" $USERAGENT $params --batch --level "5" --risk "3" >> /dev/null
+    # sudo chown -R $USER:$USER /tmp/sqlmap
+
     # At this point docker watches the container. When it terminates, docker triggers priv_kill function in order to
     # remove privoxy container that was pairing with this sqlmap instance
     docker wait $CONTNAME 1>/dev/null && priv_kill &
@@ -151,101 +148,153 @@ read_file () {
 # Main starts here
 
 check_service () {
-echo "Checking if docker service is up..."
-sudo service docker status > /dev/null
+    echo -e "$GREEN[~] Checking if docker service is up...$END"
+    sudo systemctl status docker.service > /dev/null
 
-if [ $? == "3" ]; then
-	echo "Starting docker..."
-	sudo service docker start
-	 else
-        echo "Service is running...Hack the Planet"
-fi
+    if [ $? == "3" ]; then
+        echo -e "$BOLD_YELLOW[+] Starting docker...$END"
+        sudo systemctl start docker.service
+    else
+        echo -e "$GREEN[+]Service is running...Hack the Planet...$END"
+    fi
 }
 
-while true; do
-  case "$1" in
-    -u | --url )
-	    TARGET=$2
-	    shift
-        shift
-        if [ "x"$1 == "x" ]; then
-            break
-        fi
-	    ;;
-    -d | --database )
-        DATABASE=$2
-        shift
-        shift
-        if [ "x"$1 == "x" ]; then
-            break
-        fi
-        ;;
-    -t | --table )
-        TABLE=$2
-        shift
-        shift
-        if [ "x"$1 == "x" ]; then
-            break
-        fi
-        ;;
-    -n | --name )
-        CONTNAME=$2
-        shift
-        shift
-        if [ "x"$1 == "x" ]; then
-            break
-        fi
-        ;;
-     -r | --post )
-        POST=$2
-        shift
-        shift
-        if [ "x"$1 == "x" ]; then
-            break
-        fi
-        ;;
-    -p | --dump )
-	    DUMP="True"
-        shift
-	    if [ "x"$1 == "x" ]; then
-            break
-        fi
-       ;;    
-    -s | --stop ) 
-	    echo "Stop this: $2"
-	    STOPCONT=$2
-	    stop_containers
-	    break
-	    ;;
-    -l | --list ) 
-	    list_containers
-	    shift
-	    break
-	    ;;
-    -o | --logs )
-	    LOGCONT=$2
-	    log_containers
-	    break
-	    ;;
-    -a | --stats )
-            stats_containers
-            break
-	    ;;
-    -f | --file )
-	    FILE=$2
-	    read_file
-        shift
-        shift
-	    ;;
-    -h | --help )
-	    usage
-	    ;;
-    * ) 
-	    usage
-	    ;;
-  esac
-done
+usage() {
+	echo -e "Usage: $0 [-u <url>] [<OPTIONS>]\n" \
+            "Usage: $0 [OPTIONS]\n" \
+            "OPTIONS:\n" \
+            "\t-l | $GREEN--list$END$GREEN\tList all existent containers$END\n" \
+            "\t-e | $GREEN--exited$END$GREEN\tList exited containers$END\n" \
+            "\t-u | $GREEN--url$END$GREEN\tSet target url to be tested (e.g. injector -u www.example.com)$END\n" \
+            "\t-f | $GREEN--file$END$GREEN\tSet a file containing a list of targets (e.g. injector -f targets.txt)$END\n" \
+            "\t-d | $GREEN--database$END$GREEN\tSet the target database (e.g. injector -d <database> $END\n" \
+            "\t-t | $GREEN--table$END$GREEN\tSet the target table (e.g. injector -d <database> -t <table>)$END\n" \
+            "\t-r | $GREEN--post$END$GREEN\tSet the POST request parameters (e.g -r param1&param2 or -r POST file request)$END\n" \
+            "\t-s | $GREEN--stop$END$GREEN\tStop the specified container (e.g. injector -s <container_name>) or use -s all to stop all containers$END\n" \
+            "\t-o | $GREEN--logs$END$GREEN\tShow the container log$END\n" \
+            "\t-p | $GREEN--dump$END$GREEN\tDump the data$END\n" \
+            "\t-n | $GREEN--name$END$GREEN\tChoose a name for you sqlmap container (e.g. injector -n target)$END\n" \
+            "\t-a | $GREEN--stats$END$GREEN\tDisplay the container's statistics$END\n" \
+            "\t-h | $GREEN--help$END$GREEN\tPrint this help$END\n"
 
-clear
-check_service
+	exit 0
+}
+
+
+# Here is where the program actually starts
+handle_args() {
+
+    ARGS=`getopt -o leu::s:o:f:d:t:n:r:pha --long list,exited,url:,stop:,logs:,name:,file:,database:,table:,post:,dump,stats,help -n 'injector' -- "$@"`
+
+    if [ $? != 0 ]; then
+        exit 1
+    fi
+
+    while true; do
+        case "$1" in
+            -u | --url )
+                TARGET=$2
+                shift
+                shift
+                if [ -z $1 ]; then
+                    break
+                fi
+                ;;
+
+            -d | --database )
+                DATABASE=$2
+                shift
+                shift
+                if [ -z $1 ]; then
+                    break
+                fi
+                ;;
+
+            -t | --table )
+                TABLE=$2
+                shift
+                shift
+                if [ -z $1 ]; then
+                    break
+                fi
+                ;;
+
+            -n | --name )
+                CONTNAME=$2
+                shift
+                shift
+                if [ -z $1 ]; then
+                    break
+                fi
+                ;;
+
+            -r | --post )
+                POST=$2
+                shift
+                shift
+                if [ -z $1 ]; then
+                    break/
+                fi
+                ;;
+
+            -p | --dump )
+                DUMP="True"
+                shift
+                if [ -z $1 ]; then
+                    break
+                fi
+                ;;
+
+            -s | --stop )
+                echo -e "Stopping :$BOLD_YELLOW $2 $END"
+                STOPCONT=$2
+                stop_containers
+                break
+                ;;
+
+            -l | --list )
+                list_containers
+                shift
+                break
+                ;;
+
+       	    -e | --exited )
+                list_exited
+                break
+                ;;
+
+            -o | --logs )
+                LOGCONT=$2
+                log_containers
+                break
+                ;;
+
+            -a | --stats )
+                stats_containers
+                break
+                ;;
+
+            -f | --file )
+                FILE=$2
+                read_file
+                shift
+                shift
+                ;;
+
+            -h | --help )
+                usage
+                ;;
+
+            * )
+                usage
+                ;;
+
+        esac
+    done
+}
+
+# clear
+build_environment
+handle_args "$@"
+# check_service
 attack

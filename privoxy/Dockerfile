@@ -8,4 +8,6 @@ RUN echo '@testing http://nl.alpinelinux.org/alpine/edge/testing' \
 
 COPY service /etc/service/
 
+RUN chmod +x -v /etc/service/tor/run && chmod +x /etc/service/privoxy/run
+
 CMD ["runsvdir", "/etc/service"]

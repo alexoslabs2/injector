@@ -4,11 +4,28 @@ Injector a.k.a tr4c1l0rds is a tool to run simultaneous sql injections attacks a
 
 ### How do I get set up? ###
 
-git clone https://github.com/alexoslabs2/injector.git
+##### Linux
 
-cd injector
+`git clone https://github.com/alexoslabs2/injector.git`
 
-./setup.sh
+`cd injector`
+
+`./setup.sh`
+
+
+##### Mac
+
+Download Docker from [Docker Install](https://store.docker.com/editions/community/docker-ce-desktop-mac) if you don't have it yet!
+
+`git clone https://github.com/alexoslabs2/injector.git`
+
+`cd privoxy`
+
+`sudo docker build -t alexoscorelabs/privoxy .`
+
+`cd ../sqlmap`
+
+`sudo docker build -t alexoscorelabs/sqlmap .`
 
 ### Help ###
 
@@ -29,7 +46,7 @@ OPTIONS:
 	-s | --stop	Stop the specified container (e.g. injector -s <container_name>) or use -s all to stop all containers
 	-o | --logs	Show the container log
 	-p | --dump	Dump the data
-	-n | --name	Choose a name for you sqlmap container (e.g. injector -n target)
+	-n | --name	Choose a name for you sqlmap container (e.g. injector -u TARGET -n INSTANCENAME)
 	-a | --stats	Display the container's statistics
 	-h | --help	Print this help
 
