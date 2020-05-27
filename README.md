@@ -38,6 +38,7 @@ Usage: ./injector.sh [OPTIONS]
 OPTIONS:
 
 	-l | --list	List all existent containers
+	-e | --exited   Lista exited containers
 	-u | --url	 Set target url to be tested (e.g. injector -u www.example.com)
 	-f | --file	 Set a file containing a list of targets (e.g. injector -f targets.txt)
 	-d | --database	 Set the target database (e.g. injector -d <database> 
@@ -48,6 +49,7 @@ OPTIONS:
 	-p | --dump	Dump the data
 	-n | --name	Choose a name for you sqlmap container (e.g. injector -u TARGET -n INSTANCENAME)
 	-a | --stats	Display the container's statistics
+	-i | --update   Update Injector
 	-h | --help	Print this help
 
 ### Videos ###
