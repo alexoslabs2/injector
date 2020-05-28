@@ -1,6 +1,7 @@
 #!/bin/bash
 #Injector a.k.a tr4c1l0rds
-#Authors: alexos userx nekone
+#Author: alexos
+#Special Contribuitors: userx nekone alacerda
 
 #  ____________________________________________________________________________
 #  /______|________________________________________/__|________________________
@@ -43,6 +44,9 @@ build_environment() {
     TABLE=""
     CONTNAME=""
     POST=""
+    TCONT=$(docker ps -q | wc -l)
+    TEXIT=$(docker ps -q -f "status=exited" | wc -l)
+
 }
 
 
@@ -61,11 +65,13 @@ stop_containers() {
 
 list_containers() {
 	docker ps -a
+	echo -e "$GREEN $TCONT instances running$END"
 	exit 0
 }
 
 list_exited() {
 	docker ps -a -f status=exited
+	echo -e "$GREEN $TEXIT instances exited$END"
 	exit 0
 }
 
@@ -145,6 +151,45 @@ read_file () {
     exit 0
 }
 
+
+update() {
+
+        if [ $TCONT != "0" ]; then
+                echo "$BOLD You have $TCONT instances running now... Please wait that attacks finish or stop the instances!"
+                exit 0
+         else
+                read -p "$BOLD Can update the injector now?[y/n]" input
+
+                if [ $input == "y" ] || [ $input == "Y" ]; then
+
+                       echo -e "$GREEN[+] Removing existent images...$END"
+		       docker rmi alexoscorelabs/sqlmap > /dev/null
+		       docker rmi alexoscorelabs/privoxy > /dev/null
+                       echo -e "$GREEN[+] Done...$END"
+
+                       echo -e "$GREEN[+] Updating privoxy image..$END"
+                       cd privoxy
+                       sudo docker build -t alexoscorelabs/privoxy . > /dev/null
+                       sudo docker run -d --name proxy alexoscorelabs/privoxy > /dev/null
+                       echo -e "$GREEN[+] Done...$END"
+
+                       echo -e "$GREEN[+] Testing network...$END"
+                       curl -x 172.17.0.2:8118 http://ifconfig.es
+                       sudo docker rm -f proxy
+
+                       echo -e "$GREEN[+] Updating sqlmap image...$END"
+                       cd ../sqlmap
+                       sudo docker build -t alexoscorelabs/sqlmap . > /dev/null
+                       echo -e "$GREEN[+] Done...$END"
+                       exit 0
+                else
+                       echo -e "Ok! Exiting"
+                       exit 0
+                fi
+        fi
+ }
+
+
 # Main starts here
 
 check_service () {
@@ -173,8 +218,8 @@ usage() {
             "\t-s | $GREEN--stop$END$GREEN\tStop the specified container (e.g. injector -s <container_name>) or use -s all to stop all containers$END\n" \
             "\t-o | $GREEN--logs$END$GREEN\tShow the container log$END\n" \
             "\t-p | $GREEN--dump$END$GREEN\tDump the data$END\n" \
-            "\t-n | $GREEN--name$END$GREEN\tChoose a name for you sqlmap container (e.g. injector -n target)$END\n" \
             "\t-a | $GREEN--stats$END$GREEN\tDisplay the container's statistics$END\n" \
+            "\t-i | $GREEN--update$END$GREEN\tUpdate Injector$END\n" \
             "\t-h | $GREEN--help$END$GREEN\tPrint this help$END\n"
 
 	exit 0
@@ -184,7 +229,7 @@ usage() {
 # Here is where the program actually starts
 handle_args() {
 
-    ARGS=`getopt -o leu::s:o:f:d:t:n:r:pha --long list,exited,url:,stop:,logs:,name:,file:,database:,table:,post:,dump,stats,help -n 'injector' -- "$@"`
+    ARGS=`getopt -o leui::s:o:f:d:t:r:pha --long list,exited,url,update:,stop:,logs:,file:,database:,table:,post:,dump,stats,help -n 'injector' -- "$@"`
 
     if [ $? != 0 ]; then
         exit 1
@@ -254,6 +299,12 @@ handle_args() {
 
             -l | --list )
                 list_containers
+                shift
+                break
+                ;;
+
+            -i | --update )
+                update
                 shift
                 break
                 ;;
