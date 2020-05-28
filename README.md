@@ -6,7 +6,7 @@ Injector a.k.a tr4c1l0rds is a tool to run simultaneous sql injections attacks a
 
 ##### Linux
 
-`git clone https://github.com/alexoslabs2/injector.git`
+`git clone https://github.com/iblisslabs/injector.git`
 
 `cd injector`
 
@@ -17,7 +17,7 @@ Injector a.k.a tr4c1l0rds is a tool to run simultaneous sql injections attacks a
 
 Download Docker from [Docker Install](https://store.docker.com/editions/community/docker-ce-desktop-mac) if you don't have it yet!
 
-`git clone https://github.com/alexoslabs2/injector.git`
+`git clone https://github.com/iblisslabs/injector.git`
 
 `cd privoxy`
 
