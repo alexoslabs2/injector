@@ -8,4 +8,4 @@ RUN git clone https://github.com/sqlmapproject/sqlmap.git
 
 WORKDIR /sqlmap
 
-ENTRYPOINT ["python", "sqlmap.py"]
+ENTRYPOINT ["python3", "sqlmap.py"]
