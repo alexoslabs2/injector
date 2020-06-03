@@ -208,7 +208,7 @@ usage() {
             "Usage: $0 [OPTIONS]\n" \
             "OPTIONS:\n" \
             "\t-l | $GREEN--list$END$GREEN\tList all existent containers$END\n" \
-            "\t-e | $GREEN--exited$END$GREEN\tList exited containers$END\n" \
+            "\t-e | $GREEN--exited$END$GREEN\tList all exited containers$END\n" \
             "\t-u | $GREEN--url$END$GREEN\tSet target url to be tested (e.g. injector -u www.example.com)$END\n" \
             "\t-f | $GREEN--file$END$GREEN\tSet a file containing a list of targets (e.g. injector -f targets.txt)$END\n" \
             "\t-d | $GREEN--database$END$GREEN\tSet the target database (e.g. injector -d <database> $END\n" \
