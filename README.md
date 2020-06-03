@@ -38,7 +38,7 @@ Usage: ./injector.sh [OPTIONS]
 OPTIONS:
 
 	-l | --list	List all existent containers
-	-e | --exited   Lista exited containers
+	-e | --exited   List all exited containers
 	-u | --url	 Set target url to be tested (e.g. injector -u www.example.com)
 	-f | --file	 Set a file containing a list of targets (e.g. injector -f targets.txt)
 	-d | --database	 Set the target database (e.g. injector -d <database> 
