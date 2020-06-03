@@ -94,7 +94,6 @@ priv_kill () {
 }
 
 attack() {
-    check_service
     if [  -z $CONTNAME ]; then
         if [ ! -f $INST ]; then
             echo -n 1 > $INST
@@ -163,14 +162,14 @@ update() {
                 if [ $input == "y" ] || [ $input == "Y" ]; then
 
                        echo -e "$GREEN[+] Removing existent images...$END"
-		       docker rmi alexoscorelabs/sqlmap > /dev/null
-		       docker rmi alexoscorelabs/privoxy > /dev/null
+		       docker rmi alexoscorelabs/sqlmap 2>/dev/null 
+		       docker rmi alexoscorelabs/privoxy 2>/dev/null
                        echo -e "$GREEN[+] Done...$END"
 
                        echo -e "$GREEN[+] Updating privoxy image..$END"
                        cd privoxy
-                       sudo docker build -t alexoscorelabs/privoxy . > /dev/null
-                       sudo docker run -d --name proxy alexoscorelabs/privoxy > /dev/null
+                       sudo docker build -t alexoscorelabs/privoxy . 2>/dev/null
+                       sudo docker run -d --name proxy alexoscorelabs/privoxy 2>/dev/null
                        echo -e "$GREEN[+] Done...$END"
 
                        echo -e "$GREEN[+] Testing network...$END"
@@ -179,7 +178,7 @@ update() {
 
                        echo -e "$GREEN[+] Updating sqlmap image...$END"
                        cd ../sqlmap
-                       sudo docker build -t alexoscorelabs/sqlmap . > /dev/null
+                       sudo docker build -t alexoscorelabs/sqlmap . 2>/dev/null
                        echo -e "$GREEN[+] Done...$END"
                        exit 0
                 else
@@ -347,5 +346,5 @@ handle_args() {
 # clear
 build_environment
 handle_args "$@"
-# check_service
+check_service
 attack
