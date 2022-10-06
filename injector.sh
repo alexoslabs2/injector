@@ -277,7 +277,7 @@ handle_args() {
                 shift
                 shift
                 if [ -z $1 ]; then
-                    break/
+                    break
                 fi
                 ;;
 
