@@ -50,7 +50,10 @@ echo -e "\n\n\n$GREEN[+] Configuring docker by creating its group and adding use
 sleep 1
 
 sudo groupadd docker
-sudo usermod -a -G docker ${USER}
+sudo usermod -g docker ${USER}
+
+sudo mkdir /sys/fs/cgroup/systemd
+sudo mount -t cgroup -o none,name=systemd cgroup /sys/fs/cgroup/systemd
 
 echo -e "\n\n\n$GREEN[+] Enabling docker service...\n\n\n"
 sleep 1
