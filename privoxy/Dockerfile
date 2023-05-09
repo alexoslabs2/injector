@@ -2,6 +2,8 @@ FROM alpine:latest
 
 EXPOSE 8118 9050
 
+ARG CACHEBUST=1
+
 RUN echo '@testing http://nl.alpinelinux.org/alpine/edge/testing' \
     >> /etc/apk/repositories && \
     apk --update add privoxy tor@testing runit@testing

@@ -168,7 +168,7 @@ update() {
 
                        echo -e "$GREEN[+] Updating privoxy image..$END"
                        cd privoxy
-                       sudo docker build -t alexoscorelabs/privoxy . 2>/dev/null
+                       sudo docker build -t alexoscorelabs/privoxy --build-arg CACHEBUST=$(date +%s) . 2>/dev/null
                        sudo docker run -d --name proxy alexoscorelabs/privoxy 2>/dev/null
                        echo -e "$GREEN[+] Done...$END"
 

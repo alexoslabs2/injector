@@ -69,7 +69,7 @@ sleep 1
 
 echo -e "$GREEN[+] Starting privoxy image..\n$END"
 cd privoxy
-sudo docker build -t alexoscorelabs/privoxy .
+sudo docker build -t alexoscorelabs/privoxy --build-arg CACHEBUST=$(date +%s) .
 sudo docker run -d --name proxy alexoscorelabs/privoxy
 echo -e "$GREEN[+] Done...$END"
 
@@ -80,5 +80,5 @@ sudo docker rm -f proxy
 
 echo -e "\n$GREEN[+] Starting sqlmap image...\n$END"
 cd ../sqlmap
-sudo docker build -t alexoscorelabs/sqlmap .
+sudo docker build -t alexoscorelabs/sqlmap --build-arg CACHEBUST=$(date +%s) .
 echo -e "$GREEN[+] Done...\n$BOLD_YELLOW\t\t Please consider relogin for everything to work properly [!!]\n$END"
